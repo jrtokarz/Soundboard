@@ -14,6 +14,10 @@ class SBButton(QtGui.QPushButton):
         
     def resizeEvent(self, resize_event):
         print "SBButton: I got resized"
+        
+    def position(self, posx, posy):
+        self.posx = posx
+        self.posy = posy
 
 class Example(QtGui.QWidget):
     
@@ -30,13 +34,22 @@ class Example(QtGui.QWidget):
         self.setGeometry(300, 300, 500, 300)
         self.setWindowTitle('Tooltips')    
         
-        self.btn = SBButton('Button', self)
-        self.btn.setToolTip('This is a <b>QPushButton</b> widget')
+        self.btns = []
+        for y in range(5):
+            for x in range(5):
+                btn = SBButton('Button', self)
+                btn.position(x, y)
+                btn.setToolTip('This is a <b>QPushButton</b> widget')
+                self.btns.append(btn)
         
     def resizeEvent(self, resize_event):
         super(Example, self).resizeEvent(resize_event)
         print "I got resized"
-        self.btn.resize(self.width()/5, self.height()/5)
+        w = self.width()/5
+        h = self.height()/5
+        for b in self.btns:
+            b.move(w*b.posx, h*b.posy)
+            b.resize(w, h)
         
         
 def main():
